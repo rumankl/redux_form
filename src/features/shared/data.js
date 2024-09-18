@@ -1,0 +1,34 @@
+export const radioData =[
+  {
+  value:'html',
+  label:'Html',
+  color:'red'
+},
+{
+  value:'css',
+  label:'CSS',
+  color:'yellow'
+},
+{
+  value:'java',
+  label:'Java',
+  color:'green'
+},
+];
+export const checkData =[
+  {
+  value:'fantasy',
+  label:'Fantasy',
+  color:'yellow'
+},
+{
+  value:'horror',
+  label:'Horror',
+  color:'red'
+},
+{
+  value:'adventur',
+  label:'Adventur',
+  color:'brown'
+},
+];
