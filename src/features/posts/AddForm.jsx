@@ -2,26 +2,37 @@ import { Button, Checkbox, Input, Option, Radio, Select, Textarea } from '@mater
 import { useFormik } from 'formik'
 import React from 'react'
 import { checkData, radioData } from '../shared/data'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
+import { addPost } from './postSlice'
 
 const AddForm = () => {
+  const dispatch= useDispatch();    ///action call garney ko lagi yo.
+  const nav =useNavigate();///previous, next ,logical , interaction, p-italic page haru pathai na ko.
+
   const {handleChange,values,handleSubmit,setFieldValue}= useFormik({
     initialValues:{
             title:'',
             details:'',
             program:'',
             genres:[],
-            country:''
+            country:'',
+            image:''
           },
     onSubmit:(val=>{
-      console.log(val);
+      dispatch(addPost(val));
+      nav(-1); ///previous page ra back jana use -1 .
     })
 
-  })
+  });
+//  console.log(URL); //for review ko lagi createobjecturl use garney 
+  //  console.log(values.image); //this place is perfect to rerenders the fileupload path
+  
   return (
     <div className='p-7 max-w-[300px]' >
       <form className='space-y-4' onSubmit={handleSubmit}>
       <Input name='title' onChange={handleChange} value={values.title} label='Title' />
-      <Textarea name='details' onChange={handleChange} value={values.details} label='Detail'/>
+      
 
       <div className="flex gap-10">
       {radioData.map((val,i)=>{
@@ -47,7 +58,19 @@ const AddForm = () => {
         <Option value='China'>China</Option>
       </Select>
     </div>
+    <Textarea name='details' onChange={handleChange} value={values.details} label='Detail'/>
+    <Input name='image' onChange={(e)=>{
+    // console.log(e.target.files[0]);
+    
+         const file = e.target.files[0]; //e.target.files = is a filelist object so URL.createObjectURL canot handle dirctly.hence, e.target.files[0] is suitable to write
+         setFieldValue('image', URL.createObjectURL(file)); 
 
+        //  console.log(values.image); it is not suitable to write here beacause it cannot rerenders.
+        //  console.log(values.image); wrong to display here beacuse not rerender so we can put this values in after end of file input
+          //createobjecturl
+
+    }} label='Select Image' type='file'/>
+      {values.image && <img src={values.image} alt="" /> }
       <Button type="submit" size='sm'>Submit</Button>
       </form>
     </div>
