@@ -13,7 +13,7 @@ const AllPost = () => {
 
 
       
-      {posts && posts.map((post,i)=>{
+      {posts.map((post,i)=>{
         return <div key={i} >
           {/* <div>{post.title}</div>
           <div> {post.image && <img src={post.image} alt="" /> }</div>
@@ -22,7 +22,7 @@ const AllPost = () => {
           <div className=""> {post.country}</div> */}
  <Card className="w-96">
       <CardHeader floated={false} className="h-50">
-      {post.image && <img src={post.image} alt="" /> }
+      { <img src={post.image} alt="" /> }
       </CardHeader>
       <CardBody className="text-center">
         <Typography variant="h4" color="black" className="mb-2 text-black">

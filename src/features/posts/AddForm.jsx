@@ -63,11 +63,18 @@ const AddForm = () => {
     // console.log(e.target.files[0]);
     
          const file = e.target.files[0]; //e.target.files = is a filelist object so URL.createObjectURL canot handle dirctly.hence, e.target.files[0] is suitable to write
-         setFieldValue('image', URL.createObjectURL(file)); 
+         
+        //  setFieldValue('image', URL.createObjectURL(file)); 
 
         //  console.log(values.image); it is not suitable to write here beacause it cannot rerenders.
         //  console.log(values.image); wrong to display here beacuse not rerender so we can put this values in after end of file input
           //createobjecturl
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.addEventListener('load' , (e)=>{
+          setFieldValue('image',e.target.result); 
+        })
+
 
     }} label='Select Image' type='file'/>
       {values.image && <img src={values.image} alt="" /> }
