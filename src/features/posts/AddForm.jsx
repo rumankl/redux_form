@@ -27,7 +27,9 @@ const AddForm = () => {
             program:'',
             genres:[],
             country:'',
-            image:[],
+            // image:'',
+           images:[],
+
           },
     onSubmit:(val=>{
       dispatch(addPost(val));
@@ -72,25 +74,36 @@ validationSchema : valSchema
     <Textarea name='details' onChange={handleChange} value={values.details} label='Detail'/>      
     <h1 className='text-red-200'>{errors.details}</h1>
 
-    <Input name='image' onChange={(e)=>{
-    // console.log(e.target.files[0]);
-    
-         const file = e.target.files[0]; //e.target.files = is a filelist object so URL.createObjectURL canot handle dirctly.hence, e.target.files[0] is suitable to write
+    <Input multiple name='images' onChange={(e)=>{
+    ///this for multiple image select display
+        const file = e.target.files;
+        const photos =[];
+        for(let a of file){
+          photos.push(URL.createObjectURL(a));
+        }
 
-        //  setFieldValue('image', URL.createObjectURL(file)); 
+        setFieldValue('images',photos); 
+        console.log(photos);
+        
 
-        //  console.log(values.image); it is not suitable to write here beacause it cannot rerenders.
-        //  console.log(values.image); wrong to display here beacuse not rerender so we can put this values in after end of file input
-          //createobjecturl
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.addEventListener('load' , (e)=>{
-          setFieldValue('image',e.target.result); 
-        })
+        //multiple image select display so remove this code downs//----------
+        // console.log(e.target.files[0]);
+        // const file = e.target.files[0]; 
+        // const reader = new FileReader();
+        // reader.readAsDataURL(file);
+        // reader.addEventListener('load' , (e)=>{
+        //   setFieldValue('image',e.target.result); 
+       // })
 
 
     }} label='Select Image' type='file'/>
-      {values.image && <img src={values.image} alt="" /> }
+        {/* this for multiple image display */}
+          {values.images.length > 0 && values.images?.map((i)=>{
+          return <img src={i} alt="" />
+          //  this for only second image selected and remove up{values.images.length > 0 &&  <img src={values.images[1]} alt="" />
+          })}
+
+      {/* {values.image && <img src={values.image} alt="" /> }  //multiple image remove */}  
       <Button type="submit" size='sm'>Submit</Button>
       </form>
     </div>
