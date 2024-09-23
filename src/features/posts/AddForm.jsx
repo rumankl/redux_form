@@ -6,21 +6,29 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { addPost } from './postSlice'
 import * as Yup from 'yup';
+import { nanoid } from '@reduxjs/toolkit'
 
-
+const supportedExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
 const valSchema = Yup.object({
-  title:Yup.string().max(10).min(4).required(),
-   details:Yup.string().matches(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i, 'please provide valid email ').required(),
-  // program:'',
-  // genres:[],
-  // country:'',
-  // image:[]
-})
+  // title:Yup.string().max(10).min(4).required(),
+  //  details:Yup.string().matches(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i, 'please provide valid email ').required(),
+  // // program:'',
+  // // genres:[],
+  // // country:'',
+  // // image:[]
+  title: Yup.string().min(5).max(50).required(),
+  detail: Yup.string().max(500).required(),
+  program: Yup.string().required(),
+  genres: Yup.array().min(1).required(),
+  country: Yup.string().required(),
+  image: Yup.mixed().test('fileType', 'invalid file', (e) => {
+    return e && supportedExts.includes(e.type);
+})})
 const AddForm = () => {
   const dispatch= useDispatch();    ///action call garney ko lagi yo.
   const nav =useNavigate();///previous, next ,logical , interaction, p-italic page haru pathai na ko.
 
-  const {handleChange,values,handleSubmit,setFieldValue, errors}= useFormik({
+  const {handleChange,values,handleSubmit,setFieldValue, errors, touched}= useFormik({
     initialValues:{
             title:'',
             details:'',
@@ -28,13 +36,17 @@ const AddForm = () => {
             genres:[],
             country:'',
             // image:'',
-           images:[],
-
+          // images:[],
+            image: null,
+            imageReview: ''
           },
-    onSubmit:(val=>{
-      dispatch(addPost(val));
-      nav(-1); ///previous page ra back jana use -1 .
-    }),
+          onSubmit: (val) => {
+            // console.log({ ...val, id: nanoid() });
+      
+            dispatch(addPost({ ...val, id: nanoid() }));
+            nav(-1);///previous page ra back jana use -1 .
+          },
+   
 validationSchema : valSchema
   });
 //  console.log(URL); //for review ko lagi createobjecturl use garney 
@@ -45,7 +57,7 @@ validationSchema : valSchema
       <form className='space-y-4' onSubmit={handleSubmit}>
       <Input name='title' onChange={handleChange} value={values.title} label='Title' />
 
-      <h1 className='text-red-200'>{errors.title}</h1>
+     {errors.title && touched.title && <h1 className='text-red-200'>{errors.title}</h1>}
 
       <div className="flex gap-10">
       {radioData.map((val,i)=>{
@@ -55,11 +67,13 @@ validationSchema : valSchema
      
     </div>
 
+    {errors.program && touched.program && <h1 className="text-pink-700">{errors.program}</h1>}
+
     <div className="flex w-max gap-4">
      {checkData.map((val,i)=>{
       return <Checkbox key={i} name='genres' value={val.value} label={val.label}  color={val.color} onChange={handleChange} />
      })}
-      
+        {errors.genres && touched.genres && <h1 className="text-pink-700">{errors.genres}</h1>}
      
     </div>
 
@@ -71,21 +85,31 @@ validationSchema : valSchema
         <Option value='China'>China</Option>
       </Select>
     </div>
+
+    {errors.country && touched.country && <h1 className="text-pink-700">{errors.country}</h1>}
+
     <Textarea name='details' onChange={handleChange} value={values.details} label='Detail'/>      
-    <h1 className='text-red-200'>{errors.details}</h1>
+    {errors.details && touched.details && <h1 className="text-pink-700">{errors.details}</h1>}
 
     <Input multiple name='images' onChange={(e)=>{
     ///this for multiple image select display
-        const file = e.target.files;
-        const photos =[];
-        for(let a of file){
-          photos.push(URL.createObjectURL(a));
-        }
-
-        setFieldValue('images',photos); 
-        console.log(photos);
-        
-
+        // const file = e.target.files;
+        // let photos =[];
+        // for(let a of file){
+        //   photos.push(URL.createObjectURL(a));
+        // }
+          
+        // setFieldValue('images',photos); 
+        // console.log(photos);
+        /////06/07//////
+        const file = e.target.files[0];
+        setFieldValue('image', file);
+        // setFieldValue('images', photos);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.addEventListener('load', (e) => {
+          setFieldValue('imageReview', e.target.result);
+        });
         //multiple image select display so remove this code downs//----------
         // console.log(e.target.files[0]);
         // const file = e.target.files[0]; 
@@ -98,10 +122,14 @@ validationSchema : valSchema
 
     }} label='Select Image' type='file'/>
         {/* this for multiple image display */}
-          {values.images.length > 0 && values.images?.map((i)=>{
+          {/* {values.images.length > 0 && values.images?.map((i)=>{
           return <img src={i} alt="" />
           //  this for only second image selected and remove up{values.images.length > 0 &&  <img src={values.images[1]} alt="" />
-          })}
+          })} */}
+          {/* ///0607//----- */}
+          {values.imageReview && errors.image &&
+          <img src={values.imageReview} alt="" />}
+        {errors.image && touched.image && <h1 className="text-pink-700">{errors.image}</h1>}
 
       {/* {values.image && <img src={values.image} alt="" /> }  //multiple image remove */}  
       <Button type="submit" size='sm'>Submit</Button>
