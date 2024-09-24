@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsFromLocal, setPostsToLocal } from "../shared/localstorage";
 
 
+
 export const postSlice = createSlice({
   name: 'postSlice',
   initialState: {
@@ -11,12 +12,15 @@ export const postSlice = createSlice({
 
     addPost: (state, action) => {
       state.posts.push(action.payload);
-      setPostsToLocal(state.posts)
+      setPostsToLocal(state.posts);
+    },
+    removePost: (state, action) => {
+      state.posts.splice(action.payload, 1);
+      setPostsToLocal(state.posts);
     }
 
 
   }
 });
 
-export const { addPost } = postSlice.actions;
-
+export const { addPost, removePost } = postSlice.actions;

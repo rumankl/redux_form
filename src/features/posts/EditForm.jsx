@@ -1,28 +1,15 @@
-import { Button, Checkbox, Input, Option, Radio, Select, Textarea,  } from "@material-tailwind/react"
+import { Button, Checkbox, Input, Option, Radio, Select, Textarea, } from "@material-tailwind/react"
 import { useFormik } from "formik"
 import { checkData, radioData } from "../shared/data";
 import { useDispatch } from "react-redux";
 import { addPost } from "./postSlice";
 import { useNavigate } from "react-router";
 import { nanoid } from "@reduxjs/toolkit";
-import * as Yup from 'yup';
 
-export const supportedExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
 
-export const valSchema = Yup.object({
-  title: Yup.string().min(5).max(50).required(),
-  detail: Yup.string().max(500).required(),
-  program: Yup.string().required(),
-  genres: Yup.array().min(1).required(),
-  country: Yup.string().required(),
-  image: Yup.mixed().test('fileType', 'invalid file', (e) => {
-    return e && supportedExts.includes(e.type);
-  }).test('fileSize', 'too large', (e) => {
-    return e && e.size <= 1024 * 1024 * 5;
-  }).required()
-});
 
-const AddForm = () => {
+
+const EditForm = () => {
   const dispatch = useDispatch();
 
   const nav = useNavigate();
@@ -44,7 +31,7 @@ const AddForm = () => {
       dispatch(addPost({ ...val, id: nanoid() }));
       nav(-1);
     },
-    validationSchema: valSchema
+  
 
   });
 
@@ -142,11 +129,9 @@ const AddForm = () => {
         {values.imageReview &&
           <img src={values.imageReview} alt="" />}
 
-
-
-
-
         {errors.image && touched.image && <h1 className="text-pink-700">{errors.image}</h1>}
+
+
         <Button type="submit" size="sm">Submit</Button>
 
 
@@ -156,4 +141,4 @@ const AddForm = () => {
     </div>
   )
 }
-export default AddForm
+export default EditForm

@@ -1,51 +1,46 @@
-import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, IconButton, Typography } from "@material-tailwind/react";
 import { useSelector } from "react-redux"
+import CutomDialog from "../../UI/CustomDialog";
 
 
-const AllPost = () => {
-  // const p = useSelector((state)=>state.postSlice.posts)
-  // console.log(p);
-///----same ho--------mathi simple way ma object --------------tala destruct gareko----------
-  const {posts} = useSelector((state)=>state.postSlice)
-  console.log(posts);
+const AllPosts = () => {
+
+  const { posts } = useSelector((state) => state.postSlice);
+
   return (
     <div>
+      {
+        posts.map((post, i) => {
+          return <Card key={post.id} className="mt-6 w-96">
+            <CardBody>
+              <img src={post.imageReview} alt="" />
+              <Typography variant="h5" color="blue-gray" className="mb-2">
+                {post.title}
+              </Typography>
+              <Typography>
+                {post.detail}
+              </Typography>
+            </CardBody>
+            <CardFooter className="pt-0 flex justify-between">
+              <Button>Read More</Button>
+
+              <div className="space-x-5">
+                <IconButton color="green">
+                  <i className="fas fa-edit" />
+                </IconButton>
+                
+                <CutomDialog index={i} />
+              </div>
+
+            </CardFooter>
+          </Card>;
+        })
+      }
 
 
-      
-      {posts.map((post,i)=>{
-        return <div key={i} >
-          {/* <div>{post.title}</div>
-          <div> {post.image && <img src={post.image} alt="" /> }</div>
-          <div className=""> {post.details}</div>
-          <div className=""> {post.genres}</div>
-          <div className=""> {post.country}</div> */}
- <Card className="w-96">
-      <CardHeader floated={false} className="h-50">
-      { <img src={post.image} alt="" /> }
-      </CardHeader>
-      <CardBody className="text-center">
-        <Typography variant="h4" color="black" className="mb-2 text-black">
-        {post.title}
-        </Typography>
-        <Typography color="black" className="font-medium text-black" textGradient>
-        {post.genres}
-        </Typography>
-        <Typography color="black-" className="font-medium text-black" textGradient>
-        {post.details}
-        </Typography>
-        <Typography  className="font-medium text-black" textGradient>
-        {post.country}
-        </Typography>
-      </CardBody>
-    
-    </Card>
 
 
-        </div>
-      })}
     </div>
   )
 }
-
-export default AllPost
+export default AllPosts
