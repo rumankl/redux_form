@@ -1,12 +1,12 @@
 import { Button, Card, CardBody, CardFooter, IconButton, Typography } from "@material-tailwind/react";
 import { useSelector } from "react-redux"
 import CutomDialog from "../../UI/CustomDialog";
-
+import { useNavigate } from "react-router";
 
 const AllPosts = () => {
 
   const { posts } = useSelector((state) => state.postSlice);
-
+  const nav = useNavigate();
   return (
     <div>
       {
@@ -25,7 +25,9 @@ const AllPosts = () => {
               <Button>Read More</Button>
 
               <div className="space-x-5">
-                <IconButton color="green">
+              <IconButton
+                  onClick={() => nav(`/edit-form/${post.id}`)}
+                  color="green">
                   <i className="fas fa-edit" />
                 </IconButton>
                 

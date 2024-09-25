@@ -14,6 +14,14 @@ export const postSlice = createSlice({
       state.posts.push(action.payload);
       setPostsToLocal(state.posts);
     },
+
+    updatePost: (state, action) => {
+      state.posts = state.posts.map((post) => {
+        return post.id === action.payload.id ? action.payload : post;
+      });
+      setPostsToLocal(state.posts);
+    },
+
     removePost: (state, action) => {
       state.posts.splice(action.payload, 1);
       setPostsToLocal(state.posts);
@@ -23,4 +31,4 @@ export const postSlice = createSlice({
   }
 });
 
-export const { addPost, removePost } = postSlice.actions;
+export const { addPost, removePost,updatePost } = postSlice.actions;
