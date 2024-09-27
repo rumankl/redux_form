@@ -6,6 +6,7 @@ import { addPost } from "./postSlice";
 import { useNavigate } from "react-router";
 import { nanoid } from "@reduxjs/toolkit";
 import * as Yup from 'yup';
+import DisplayPopup from "../../DisplayPopup";
 
 export const supportedExts = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
 
@@ -52,6 +53,7 @@ const AddForm = () => {
 
   return (
     <div className="p-7 max-w-[300px]">
+      <DisplayPopup />
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           name="title"
@@ -115,6 +117,7 @@ const AddForm = () => {
         <Input
           // multiple
           name="image"
+          
           onChange={(e) => {
             const file = e.target.files[0];
             setFieldValue('image', file);

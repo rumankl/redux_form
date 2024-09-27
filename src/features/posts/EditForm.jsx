@@ -1,10 +1,13 @@
-import { Button, Checkbox, Input, Option, Radio, Select, Textarea, Typography } from "@material-tailwind/react"
+import { Button, Checkbox, Input, Option, Radio, Select, Textarea, 
+  
+ } from "@material-tailwind/react"
 import { useFormik } from "formik"
 import { checkData, radioData } from "../shared/data";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost, updatePost } from "./postSlice";
+import { 
+   updatePost } from "./postSlice";
 import { useNavigate, useParams } from "react-router";
-import { nanoid } from "@reduxjs/toolkit";
+// import { nanoid } from "@reduxjs/toolkit";
 import * as Yup from 'yup';
 import { supportedExts } from "./AddForm";
 
